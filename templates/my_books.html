@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}My Books{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>My Borrowed Books</h2>
+    {% if books %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    <th>Return</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.year or '-' }}</td>
+                    <td>
+                        <a class="btn-small danger" href="{{ url_for('return_book', book_id=book.id) }}">
+                            Return
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="small-text">You have not borrowed any books yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

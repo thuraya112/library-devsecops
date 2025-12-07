@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}Search Books{% endblock %}
+{% block content %}
+<div class="card">
+    <h2>Search Books (SQL Injection Demo)</h2>
+    <form method="POST">
+        <label>Search by title</label>
+        <input type="text" name="q" value="{{ q or '' }}" placeholder="Type part of a title...">
+        <button type="submit">Search</button>
+    </form>
+    {% if results %}
+        <table class="table" style="margin-top: 15px;">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for row in results %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ row.title }}</td>
+                    <td>{{ row.author }}</td>
+                    <td>{{ row.year or '-' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% elif q %}
+        <p class="small-text">No results for "{{ q }}".</p>
+    {% endif %}
+</div>
+{% endblock %}

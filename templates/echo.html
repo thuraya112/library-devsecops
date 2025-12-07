@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}XSS Demo{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>XSS Demo (Intentional)</h2>
+    <form method="POST">
+        <label>Type any message:</label>
+        <input type="text" name="message" value="">
+        <button type="submit">Show</button>
+    </form>
+
+    {% if message %}
+        <p style="margin-top: 15px;">Output:</p>
+        
+        <div style="padding: 10px; border: 1px solid #e5e7eb; margin-top: 5px;">
+            {{ message|e}}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

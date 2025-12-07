@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}All Books{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>All Books</h2>
+    {% if books %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Title</th>
+                    <th>Author</th>
+                    <th>Year</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.year or '-' }}</td>
+                    <td>
+                        {% if book.is_available %}
+                            <span class="badge badge-available">Available</span>
+                        {% elif book.borrower_id == current_user.id %}
+                            <span class="badge badge-mine">Borrowed by you</span>
+                        {% else %}
+                            <span class="badge badge-borrowed">Borrowed</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if book.is_available %}
+                            <a class="btn-small" href="{{ url_for('borrow', book_id=book.id) }}">Borrow</a>
+                        {% else %}
+                            <span class="text-muted">Not available</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p class="small-text">No books in the library yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

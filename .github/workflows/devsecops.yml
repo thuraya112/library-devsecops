@@ -97,6 +97,8 @@ jobs:
         with:
           target: "http://localhost:5000"
           fail_action: false
+          allow_issue_writing: false
+          rules_file_name: ""
 
       - name: Upload ZAP report
         if: always()

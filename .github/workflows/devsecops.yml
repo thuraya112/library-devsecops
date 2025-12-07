@@ -89,7 +89,7 @@ jobs:
           FLASK_ENV: production
           PORT: 5000
         run: |
-          python app.py &
+          nohup python app.py > flask.log 2>&1 &
           sleep 20
 
       - name: Run ZAP Baseline Scan

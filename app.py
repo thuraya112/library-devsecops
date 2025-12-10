@@ -131,7 +131,7 @@ def login():
 
         user = User.query.filter_by(username=username).first()
         if user and bcrypt.check_password_hash(user.password_hash, password):
-
+            app.logger.info("User %s logged in successfully (password correct, OTP sent)", username)
             otp_code = generate_otp()
             session['mfa_user_id'] = user.id
             session['mfa_code'] = otp_code
@@ -143,6 +143,7 @@ def login():
             return redirect(url_for('mfa_verify'))
 
         else:
+            app.logger.warning("Failed login attempt for username=%s", username)
             flash('Invalid username or password.', 'danger')
 
     return render_template('login.html')
@@ -192,6 +193,7 @@ def mfa_verify():
 
             if user:
                 login_user(user)
+                app.logger.info("MFA passed successfully for user_id=%s", user_id)
                 flash('Login verified successfully (MFA passed).', 'success')
                 return redirect(url_for('books'))
             else:
@@ -202,6 +204,7 @@ def mfa_verify():
         attempts += 1
 
         if attempts >= 3:
+            app.logger.error("MFA lockout for user_id=%s", session.get('mfa_user_id'))
            
             session.pop('mfa_user_id', None)
             session.pop('mfa_code', None)
@@ -281,11 +284,13 @@ def borrow(book_id):
         book.is_available = False
         book.borrower_id = current_user.id
         db.session.commit()
+        app.logger.info("User %s borrowed book_id=%s", current_user.username, book_id)
         flash(f'You borrowed "{book.title}".', 'success')
     else:
         flash('This book is not available.', 'warning')
 
     return redirect(url_for('books'))
+
 
 
 # ===== إرجاع كتاب =====

@@ -4,3 +4,4 @@ Flask-Bcrypt
 Flask-SQLAlchemy
 bandit
 pip-audit
+gunicorn
